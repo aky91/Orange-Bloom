@@ -21,7 +21,7 @@ class Ideone{
             int ans = getAns(N, K);
     
             System.out.println(ans);
-		}	
+			
 
 	}
 	
