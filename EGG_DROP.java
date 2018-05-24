@@ -19,7 +19,8 @@ class Ideone{
             int K = scn.nextInt();
             
             int ans = getAns(N, K);
-
+    
+            System.out.println(ans);
 		}	
 
 	}
