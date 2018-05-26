@@ -57,7 +57,8 @@ class Ideone{
 
 			for(int item : list)
 				System.out.print(item + " ");
-
+			
+			System.out.println();
 		}	
 	}
 }
