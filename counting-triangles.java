@@ -61,13 +61,13 @@ class TestClass{
 			while((i + range) < N && hash[i + range][0] == hash[i][0])
 				range++;
 
-			if(range == 0){
+			if(range == 1){
 				count++;
 				i++;
 				continue;
 			}
 
-			i += range + 1;
+			i += range;
 		}
 
 		System.out.println(count);
@@ -76,7 +76,7 @@ class TestClass{
 
 	public static long getHash(long a, long b, long c){
 
-		long hash = (a%prime + b%prime + c%prime)%prime;
+		long hash = (a%prime + b%prime + c%prime + (a*b)%prime + (b*c)%prime + (a*c)%prime + (a*b*c)%prime)%prime;
 
 		return hash;
 	}
