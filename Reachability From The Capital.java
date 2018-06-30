@@ -19,121 +19,106 @@ public class TestClass{
 		int E = scn.nextInt();
 		int C = scn.nextInt();
 
-		HashMap<Integer, HashSet<Integer>> roadMap = new HashMap<>();
+		HashMap<Integer, HashSet<Integer>> roadMapO = new HashMap<>();
+		HashMap<Integer, HashSet<Integer>> roadMapI = new HashMap<>();
+		HashMap<Integer, Boolean> judgement = new HashMap<>();
 
-		HashSet<Integer> visited = new HashSet<>();
-		HashSet<Integer> vigilante = new HashSet<>();
-
-		for(int i = 1; i <= V; i++)
-			vigilante.add(i);
+		for(int i = 1; i <= V; i++){
+			roadMapO.put(i, new HashSet<>());
+			roadMapI.put(i, new HashSet<>());
+			judgement.put(i, false);
+		}
 
 		for(int i = 0; i < E; i++){
 			int u = scn.nextInt();
 			int v = scn.nextInt();
 
-			if(!roadMap.contains(u)) roadMap.put(new HashSet<>());
-
-			roadMap.get(u).add(v);
+			roadMapO.get(u).add(v);
+			roadMapO.get(v).add(u);
 		}
 
-		// main dfs for finding vigilante vertices
+		// main dfs for finding bad vertices
 		Stack<Integer> st = new Stack<>();
 		st.push(C);
+
+		HashSet<Integer> visited = new HashSet<>();
 
 		while(st.size() != 0){
 
 			int u = st.pop();
 
-			if(visited.contains(u))
-				continue;
+			//skip if already visited
+			if(visited.contains(u)) continue;
 
 			visited.add(u);
+			judgement.put(u, true);
 
-			for(int v = V; v > 0; v--)
-				if(roadMap[u][v] == true && !visited.contains(v))
+			//if no outgoing roads then skip
+			if(roadMapO.get(u).size() == 0) continue;
+
+			//put all unvisited cities in stack
+			for(int v : roadMapO.get(u))
+				if(!visited.contains(v))
 					st.push(v);
 		}
 
-		Iterator<Integer> itr = visited.iterator();
+		//now traverse through all bad cities 
 
-		while(itr.hasNext())
-			vigilante.remove(itr.next());
+		HashMap<Integer, Integer> crimes = new HashMap<>();
+		HashMap<Integer, HashSet<Integer>> fir = new HashMap<>();
 
-		//now we have all unreachable cities in vigilante
+		for(int city = 1; city <= V; city++){
 
-		HashMap<Integer, Integer> crime = new HashMap<>();
-		HashMap<Integer, ArrayList<Integer>> bank = new HashMap<>();
+			if(judgement.get(city)) continue;
 
-		itr = vigilante.iterator();
+			fir.put(city, new HashSet<>());
 
-		while(itr.hasNext()){
-			
-			int center = itr.next();
-
-			//start dfs form center and count the reachable vigilante cities
-
+			//start DFA from this city and count no. of bad cities visited
 			st = new Stack<>();
+			st.push(city);
 			visited = new HashSet<>();
-			int killCount = 0;
 
-			st.push(center);
+			int killCount = 0;
 
 			while(st.size() != 0){
 
-				int u = st.pop();
+				int c = st.pop();
 
-				if(u != center && vigilante.contains(u)){
-					if(!bank.containsKey(center))	bank.put(center, new ArrayList<>());
-					bank.get(center).add(u);
+				if(visited.contains(c)) continue;
+
+				if(judgement.get(c) == false){
+
+					if(!fir.get(city).contains(c))
+						fir.get(city).add(c);
+
 					killCount++;
 				}
 
-				if(visited.contains(u))
-					continue;
+				visited.add(c);
 
-				visited.add(u);
-
-				for(int v = V; v > 0; v--)
-					if(roadMap[u][v] == true && !visited.contains(v))
-						st.push(v);
-				
+				for(int neighbour : roadMapO.get(c))
+					if(!visited.contains(neighbour) && )
+						st.push(neighbour);
 			}
 
-			crime.put(center, killCount);
+			crimes.put(city, killCount);
 		}
 
-		ArrayList<Integer> cities = new ArrayList<>(crime.keySet());
+		//here we go again
 
-		Collections.sort(cities, new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
+		ArrayList<Integer> list = new ArrayList<>(crimes.keySet());
 
-				int a = crime.get(o1);
-				int b = crime.get(o2);
+		int newRoad = 0;
 
-				//decending order
-				if(a < b) return 1;
-				if(a > b) return -1;
-				return 0;
+		//traverse through all bad cities
+		for(int city : list){
+
+			if(roadMapI.get(city).size() == 0){
+				newRoad++;
+
 			}
-		});
-
-		visited = new HashSet<>();
-		int roads = 0;
-
-		for(int city : cities){
-			
-			if(visited.contains(city))	continue;
-
-			visited.add(city);
-
-			roads++;
-
-			if(bank.get(city) == null) continue;
-
-			for(int target : bank.get(city))
-				visited.add(target);
 		}
 
-		System.out.println(roads);
+		System.out.print(newRoad);
 	}
 }
