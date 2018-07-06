@@ -13,16 +13,16 @@ public class Solution {
         long sqE = (long)(N * (N + 1) * (2*N + 1) / 6);
         
         for(int i = 0; i < N; i++){
-            int n = A.get(i);
+            long n = (long)A.get(i);
             
             sum += n;
-            sq += n * n;
+            sq += (long)(n * n);
         }
         
         long x = sumE - sum;
         long y = (sqE - sq)/x;
         
-        int a = (int)((x + y)>>1);
+        int a = (int)((x + y)/2);
         int b = (int)(a - x);
         
         ArrayList<Integer> ans = new ArrayList<Integer>();
