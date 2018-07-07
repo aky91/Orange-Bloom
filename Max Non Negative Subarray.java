@@ -1,19 +1,20 @@
 //https://www.interviewbit.com/problems/max-non-negative-subarray/
 
 public class Solution {
-
+    
     public ArrayList<Integer> maxset(ArrayList<Integer> A) {
         
         int N = A.size();
         
-        int max = 0;
+        long max = -1;
         int start = -1;
         int end = -1;
         
-        int sum = 0;
+        long sum = 0;
         int s = -1;
         
         boolean flow = false;
+        boolean allNeg = true;
         
         for(int i = 0; i <= N; i++){
             
@@ -26,6 +27,8 @@ public class Solution {
             
             if(num >= 0){
                 
+                allNeg = false;
+                
                 if(flow == false){
                     flow = true;
                     s = i;
@@ -37,7 +40,7 @@ public class Solution {
                 
                 flow = false;
                 
-                if(sum > max && (i-1-s) > (end - start)){
+                if(sum > max ){
                     start = s;
                     end = i - 1;
                     max = sum;
@@ -49,7 +52,7 @@ public class Solution {
         
         ArrayList<Integer> ans = new ArrayList<>();
         
-        if(max == -1)
+        if(allNeg)
             return ans;
             
         for(int i = start; i <= end; i++)
