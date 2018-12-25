@@ -1,0 +1,65 @@
+// Akash Yadav
+// @Sohar, Oman
+// 25th December
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+import java.math.*;
+
+class TestClass{
+
+	//https://www.codechef.com/problems/CKISSHUG
+
+	public static Scanner scn = new Scanner(System.in);
+
+	public static long MOD = 1000000007L;
+
+	public static void main (String[] args) throws java.lang.Exception{
+
+		int T = scn.nextInt();
+
+		while(T-- > 0){
+
+			long N = scn.nextLong();
+
+			long ans = 0;
+
+			if(N == 1)
+				ans = 2;
+			else if(N == 2)
+				ans = 4;
+			else if(N%2 == 0)
+				ans = (power(2, N/2) + fun(N-1))%MOD;
+			else if(N%2 == 1)
+				ans = fun(N); 
+
+			System.out.println(ans);
+		}
+	}
+
+	public static long fun(long N){
+
+		long p = (N-3)/2 + 1;
+		
+		long mid = power(2, p);
+
+		long ans = ((4 * (mid - 1))%MOD + 2)%MOD;
+
+		return ans;
+	}
+
+	public static long power(long x, long y) { 
+
+		if( y == 0) return 1; 
+
+		long temp = power(x, y/2); 
+
+		long ans = (temp * temp)%MOD;
+
+		if(y%2 != 0)
+			ans = (ans * x)%MOD;
+
+		return ans;
+	}  
+}
