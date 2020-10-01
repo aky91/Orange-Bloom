@@ -1,0 +1,11 @@
+public ArrayList<Integer> list=new ArrayList<>();
+    public int kthSmallest(TreeNode root, int k) {
+        if(root==null)  return 0;
+        int l=kthSmallest(root.left,k);
+        if(l!=0)
+            return l;
+        list.add(root.val);
+        if(list.size()==k)   return list.get(list.size()-1);
+        return kthSmallest(root.right,k);
+        
+    }
